@@ -24,7 +24,12 @@ const EventsSchema = new mongoose.Schema({
   published_date: {
    type: Date,
    default: Date.now
- },
+  },
+  url: {
+    type: String,
+    required: false,
+    unique: true
+  },
   updated_date: {
     type: Date,
     default: Date.now

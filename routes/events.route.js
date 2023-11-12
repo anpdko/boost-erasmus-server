@@ -30,8 +30,17 @@ router.get('/', async (req, res) => {
 // GET api/events/:id - Get one events by id
 router.get('/:id', (req, res) => {
   Events.findById(req.params.id)
-    .then(events => {
-      res.json(events)
+    .then(event => {
+      res.json(event)
+    })
+    .catch(err => res.status(404).json({ msg: 'Events not found' }));
+});
+
+// GET api/events/url/:url - Get one events by url
+router.get('/url/:url', (req, res) => {
+  Events.findOne({ url: req.params.url })
+    .then(event => {
+      res.json(event)
     })
     .catch(err => res.status(404).json({ msg: 'Events not found' }));
 });

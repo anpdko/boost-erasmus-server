@@ -3,28 +3,28 @@ const router = express.Router();
 const Events = require('../models/events.module');
 const { verifyToken } = require('../middleware/admin.middleware');
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 6;
 
 // GET api/events - Get all events
 router.get('/', async (req, res) => {
   const page = parseInt(req.query.page || '1') - 1
   const totalPages = await Events.countDocuments({})
-   
-   Events.find()
-   .limit(PAGE_SIZE)
-   .skip(PAGE_SIZE * page)
-   .sort({date:-1}) 
-   .then((events) => {
+
+  Events.find()
+    .limit(PAGE_SIZE)
+    .skip(PAGE_SIZE * page)
+    .sort({ published_date: -1 })
+    .then((events) => {
       return res.json({
-         page: page + 1,
-         totalPages: Math.ceil(totalPages / PAGE_SIZE),
-         books: events
+        page: page + 1,
+        totalPages: Math.ceil(totalPages / PAGE_SIZE),
+        books: events
       });
-   })
-   .catch((err) => {
+    })
+    .catch((err) => {
       console.log(err)
       return res.status(400).json({ message: 'Книги не знайдено' })
-   })
+    })
 });
 
 // GET api/events/:id - Get one events by id
@@ -47,7 +47,7 @@ router.get('/url/:url', (req, res) => {
 
 // GET api/events - Add/save events
 router.post('/', verifyToken, (req, res) => {
-   Events.create(req.body)
+  Events.create(req.body)
     .then(events => {
       res.json({ msg: 'Events added successfully' })
     })
@@ -59,7 +59,7 @@ router.post('/', verifyToken, (req, res) => {
 
 // GET api/events/:id - Update events
 router.put('/:id', verifyToken, (req, res) => {
-   Events.findByIdAndUpdate(req.params.id, req.body)
+  Events.findByIdAndUpdate(req.params.id, req.body)
     .then(events => res.json({ msg: 'Successfully updated' }))
     .catch(err =>
       res.status(400).json({ error: 'Unable to update database' })
@@ -68,7 +68,7 @@ router.put('/:id', verifyToken, (req, res) => {
 
 // GET api/events/:id - Delete book
 router.delete('/:id', verifyToken, (req, res) => {
-   Events.findByIdAndRemove(req.params.id, req.body)
+  Events.findByIdAndRemove(req.params.id, req.body)
     .then(events => res.json({ mgs: 'events successfully deleted' }))
     .catch(err => res.status(404).json({ error: 'Events not found' }));
 });

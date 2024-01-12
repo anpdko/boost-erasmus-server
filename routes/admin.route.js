@@ -4,7 +4,14 @@ const router = Router()
 const Admin = require('../models/admin.module')
 const bcrypt = require('bcryptjs')
 const jwtToken = require('jsonwebtoken')
+const { verifyToken } = require('../middleware/admin.middleware');
 
+
+router.get('/islogged', verifyToken,  async (req, res) => {
+   return res.status(200).json({
+      message: "Authorization check successful"
+   })
+})
 
 router.post('/registration', async (req, res) => {
    try {
@@ -38,7 +45,7 @@ router.post('/login', async (req, res) => {
       if (!admin) {
          return res.status(400).json({
             message: {
-               login: 'Incorrect data during registration'
+               login: 'Невірний логін'
             }
          })
       }
@@ -48,7 +55,7 @@ router.post('/login', async (req, res) => {
       if (!isMatch) {
          return res.status(400).json({
             message: {
-               password: 'Incorrect data during registration!'
+               password: 'Невірний пароль'
             }
          })
       }

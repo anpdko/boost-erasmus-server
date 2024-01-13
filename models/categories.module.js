@@ -10,6 +10,10 @@ const CategoriesSchema = new mongoose.Schema({
     required: false,
     unique: true
   },
+  data: {
+    type: String,
+    required: true
+  },
   published_date: {
    type: Date,
    default: Date.now

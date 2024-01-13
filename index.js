@@ -18,6 +18,7 @@ app.use('/static/images', express.static(path.join(__dirname, 'static/images')))
 
 app.use('/api/admin', require('./routes/admin.route'))
 app.use('/api/events', require('./routes/events.route')) 
+app.use('/api/categories', require('./routes/categories.route')) 
 app.use('/api/file', require('./routes/file.route'))
 
 const start = async () => {

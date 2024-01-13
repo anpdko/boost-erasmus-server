@@ -23,7 +23,7 @@ const EventsSchema = new mongoose.Schema({
       ref: "Categories"
     }],
     required: true,
-    default: "All"
+    default: "65a2f7899d4b34d7551c5165"
   },
   publisher: {
     type: Boolean,

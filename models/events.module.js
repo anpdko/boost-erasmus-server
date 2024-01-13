@@ -17,6 +17,14 @@ const EventsSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  categories: {
+    type: [{
+      type: mongoose.Types.ObjectId,
+      ref: "Categories"
+    }],
+    required: true,
+    default: "All"
+  },
   publisher: {
     type: Boolean,
     default: true

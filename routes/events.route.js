@@ -5,15 +5,13 @@ const { verifyToken } = require('../middleware/admin.middleware');
 
 const PAGE_SIZE = 6;
 
-// GET api/events - Get all events
+// GET api/events?page=0&category="" - Get all events
 router.get('/', async (req, res) => {
   const page = parseInt(req.query.page || '1') - 1
   const totalPages = await Events.countDocuments({})
 
-  Events.find()
-    .limit(PAGE_SIZE)
-    .skip(PAGE_SIZE * page)
-    .sort({ published_date: -1 })
+  if(req.query?.category){
+    Events.find({ category: req.query.category})
     .then((events) => {
       return res.json({
         page: page + 1,
@@ -25,6 +23,21 @@ router.get('/', async (req, res) => {
       console.log(err)
       return res.status(400).json({ message: 'Книги не знайдено' })
     })
+  }
+  else{
+    Events.find()
+    .then((events) => {
+      return res.json({
+        page: page + 1,
+        totalPages: Math.ceil(totalPages / PAGE_SIZE),
+        books: events
+      });
+    })
+    .catch((err) => {
+      console.log(err)
+      return res.status(400).json({ message: 'Книги не знайдено' })
+    })
+  }
 });
 
 // GET api/events/:id - Get one events by id

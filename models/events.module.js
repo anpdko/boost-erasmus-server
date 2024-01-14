@@ -17,13 +17,12 @@ const EventsSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  categories: {
+  category: {
     type: [{
       type: mongoose.Types.ObjectId,
       ref: "Categories"
     }],
-    required: true,
-    default: "65a2f7899d4b34d7551c5165"
+    required: false,
   },
   publisher: {
     type: Boolean,

@@ -8,11 +8,15 @@ const PAGE_SIZE = 6;
 // GET api/events?page=0&category="" - Get all events
 router.get('/', async (req, res) => {
   const page = parseInt(req.query.page || '1') - 1
-  const totalPages = await Events.countDocuments({})
   const category = req.query?.category;
 
   if(category){
-    Events.find({ category: { $in: [category] }})
+    const totalPages = await Events.countDocuments({ categories: { $in: [category] }})
+
+    Events.find({ categories: { $in: [category] }})
+    .limit(PAGE_SIZE)
+    .skip(PAGE_SIZE * page)
+    .sort({ published_date: -1 })
     .then((events) => {
       return res.json({
         page: page + 1,
@@ -26,7 +30,12 @@ router.get('/', async (req, res) => {
     })
   }
   else{
+    const totalPages = await Events.countDocuments({})
+
     Events.find()
+    .limit(PAGE_SIZE)
+    .skip(PAGE_SIZE * page)
+    .sort({ published_date: -1 })
     .then((events) => {
       return res.json({
         page: page + 1,

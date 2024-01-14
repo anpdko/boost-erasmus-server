@@ -9,9 +9,10 @@ const PAGE_SIZE = 6;
 router.get('/', async (req, res) => {
   const page = parseInt(req.query.page || '1') - 1
   const totalPages = await Events.countDocuments({})
+  const category = req.query?.category;
 
-  if(req.query?.category){
-    Events.find({ category: req.query.category})
+  if(category){
+    Events.find({ category: { $in: [category] }})
     .then((events) => {
       return res.json({
         page: page + 1,

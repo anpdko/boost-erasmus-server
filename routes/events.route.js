@@ -50,6 +50,22 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET api/events/all
+router.get('/all', async (req, res) => {
+  Events.find()
+  .sort({ published_date: -1 })
+  .then((events) => {
+    return res.json({
+      events: events
+    });
+  })
+  .catch((err) => {
+    console.log(err)
+    return res.status(400).json({ message: 'Книги не знайдено' })
+  })
+})
+
+
 // GET api/events/:id - Get one events by id
 router.get('/:id', (req, res) => {
   Events.findById(req.params.id)

@@ -16,6 +16,18 @@ app.get('/', (req, res) => {
 
 app.use('/static/images', express.static(path.join(__dirname, 'static/images')))
 
+app.get('/api/files', (req, res) => {
+  const folderPath = path.join(__dirname, 'static/images');
+
+  fs.readdir(folderPath, (err, files) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Internal Server Error');
+    }
+    res.json({ files });
+  });
+});
+
 app.use('/api/admin', require('./routes/admin.route'))
 app.use('/api/events', require('./routes/events.route')) 
 app.use('/api/categories', require('./routes/categories.route')) 

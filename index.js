@@ -22,12 +22,12 @@ app.get('/api/files', (req, res) => {
 
  function readFiles(dir) {
     const files = fs.readdirSync(dir);
-    return files.map(file => {
+    return files.flatMap(file => {
       const filePath = path.join(dir, file);
       const isDirectory = fs.statSync(filePath).isDirectory();
 
       if (isDirectory) {
-        return { [file]: readFiles(filePath) };
+        return readFiles(filePath).map(subFile => path.join(file, subFile));
       } else {
         return file;
       }

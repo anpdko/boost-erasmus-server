@@ -20,13 +20,25 @@ app.use('/static/images', express.static(path.join(__dirname, 'static/images')))
 app.get('/api/files', (req, res) => {
   const folderPath = path.join(__dirname, 'static/images');
 
-  fs.readdir(folderPath, (err, files) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Internal Server Error');
-    }
-    res.json({ files });
-  });
+  function readFiles(dir) {
+    const files = fs.readdirSync(dir);
+    return files.reduce((acc, file) => {
+      const filePath = path.join(dir, file);
+      const isDirectory = fs.statSync(filePath).isDirectory();
+
+      if (isDirectory) {
+        acc[file] = readFiles(filePath);
+      } else {
+        acc.push(file);
+      }
+
+      return acc;
+    }, []);
+  }
+
+  const allFiles = readFiles(folderPath);
+
+  res.json({ files: allFiles });
 });
 
 app.use('/api/admin', require('./routes/admin.route'))

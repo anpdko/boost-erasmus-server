@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
     Events.find({ categories: { $in: [category] }})
     .limit(PAGE_SIZE)
     .skip(PAGE_SIZE * page)
-    .sort({ published_date: -1 })
+    .sort({ updated_date: -1 })
     .then((events) => {
       return res.json({
         page: page + 1,
@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
     Events.find()
     .limit(PAGE_SIZE)
     .skip(PAGE_SIZE * page)
-    .sort({ published_date: -1 })
+    .sort({ updated_date: -1 })
     .then((events) => {
       return res.json({
         page: page + 1,
@@ -53,7 +53,7 @@ router.get('/', async (req, res) => {
 // GET api/events/all
 router.get('/all', async (req, res) => {
   Events.find()
-  .sort({ published_date: -1 })
+  .sort({ updated_date: -1 })
   .then((events) => {
     return res.json({
       events: events

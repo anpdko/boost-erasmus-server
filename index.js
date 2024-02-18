@@ -20,20 +20,18 @@ app.use('/static/images', express.static(path.join(__dirname, 'static/images')))
 app.get('/api/files', (req, res) => {
   const folderPath = path.join(__dirname, 'static/images');
 
-  function readFiles(dir) {
+ function readFiles(dir) {
     const files = fs.readdirSync(dir);
-    return files.reduce((acc, file) => {
+    return files.map(file => {
       const filePath = path.join(dir, file);
       const isDirectory = fs.statSync(filePath).isDirectory();
 
       if (isDirectory) {
-        acc[file] = readFiles(filePath);
+        return { [file]: readFiles(filePath) };
       } else {
-        acc.push(file);
+        return file;
       }
-
-      return acc;
-    }, []);
+    });
   }
 
   const allFiles = readFiles(folderPath);
